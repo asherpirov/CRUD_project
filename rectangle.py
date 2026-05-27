@@ -9,6 +9,9 @@ class Rectangle(Shape):
     def __init__(self, shape_id: int, height: float, width: float) -> None:
         """Initialize a Rectangle with an ID, height, and width."""
         super().__init__(shape_id, "rectangle")
+        if not isinstance((height,width), (int, float)) or (height <= 0 and width <= 0):
+            logger.error("Failed to create Rectangle ID %s: Height and width must be greater than 0.", shape_id)
+            raise ValueError("The Height and width must be greater than 0.")
         self.height = height
         self.width = width
         logger.info("Created Rectangle object with ID: %s", shape_id)

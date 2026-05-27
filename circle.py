@@ -9,6 +9,10 @@ class Circle(Shape):
     def __init__(self, shape_id: int, radius: float) -> None:
         """Initialize a circle with an ID and radius."""
         super().__init__(shape_id, "circle")
+        if not isinstance(radius, (int, float)) or radius <= 0:
+            logger.error("Failed to create Circle ID %s: Radius must be greater than 0.", shape_id)
+            raise ValueError("The Radius must be greater than 0.")
+
         self.radius = radius
         logger.info("Created Circle object with ID: %s", shape_id)
 
