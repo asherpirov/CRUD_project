@@ -1,4 +1,8 @@
 import logging
+import json
+from rectangle import Rectangle
+from circle import Circle
+from square import Square
 
 logger = logging.getLogger(__name__)
 
@@ -8,13 +12,33 @@ class ShapeManager:
         """Initialize the manager and load existing shapes from JSON."""
         self.shapes = []
         self.load_from_json()
-    def create_shape(self, shape):
+
+    def create_shape(self, shape_dict: dict) -> object:
         """Add a new shape to the list and save changes."""
-        pass
+        if shape_dict["shape_type"] == "rectangle":
+            new_shape = Rectangle(shape_dict["id"] ,shape_dict["width"], shape_dict["height"])
+        elif shape_dict["shape_type"] == "circle":
+            new_shape = Circle(shape_dict["id"] ,shape_dict["radius"])
+        elif shape_dict["shape_type"] == "square":
+            new_shape = Square(shape_dict["id"] ,shape_dict["side"])
+        else:
+            logger.error("Shape type not recognized")
+            raise ValueError("Shape type not recognized")
+
+        logger.info("Creating new shape: {%s}", new_shape)
+        self.shapes.append(new_shape)
+        logger.info("Shape: {%s} append to the shape list", new_shape)
+        return new_shape
+
+
+
+
 
     def get_all_shapes(self):
         """Return a list of all currently managed shapes."""
-        pass
+        if not self.shapes:
+            return []
+        return self.shapes
 
     def update_shape(self, shape_id, new_data):
         """Find a shape by ID and update its attributes."""
@@ -30,4 +54,12 @@ class ShapeManager:
 
     def load_from_json(self):
         """Load and parse shapes from the JSON file into memory."""
-        pass
+        try:
+            with open("shapes.json", "r", encoding="utf-8") as file:
+                logger.info()
+        for shape_dict in self.shapes:
+            if shape_dict["type"] == "regtanle":
+
+
+
+
