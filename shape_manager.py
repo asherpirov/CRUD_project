@@ -14,10 +14,10 @@ class ShapeManager:
         self.shapes = []
         self.load_from_json()
 
-    def create_shape(self, shape_dict: dict) -> object:
+    def create_shape(self, shape_dict: dict):
         """Add a new shape to the list and save changes."""
         if shape_dict["shape_type"] == "rectangle":
-            new_shape = Rectangle(shape_dict["id"] ,shape_dict["width"], shape_dict["height"])
+            new_shape = Rectangle(shape_dict["id"] ,shape_dict["height"],shape_dict["width"])
         elif shape_dict["shape_type"] == "circle":
             new_shape = Circle(shape_dict["id"] ,shape_dict["radius"])
         elif shape_dict["shape_type"] == "square":
@@ -26,9 +26,9 @@ class ShapeManager:
             logger.error("Shape type not recognized")
             raise ValueError("Shape type not recognized")
 
-        logger.info("Creating new shape: {%s}", new_shape)
+        logger.info("Creating new shape: {%s}", shape_dict["shape_type"])
         self.shapes.append(new_shape)
-        logger.info("Shape: {%s} append to the shape list", new_shape)
+        logger.info("Shape: {%s} append to the shape list", shape_dict["shape_type"])
 
         return new_shape
 
@@ -54,9 +54,12 @@ class ShapeManager:
         try:
             with open("shapes.json", "r", encoding="utf-8") as file:
                 shapes_list = json.load(file)
-                logger.info("Starting to parse shapes from JSON")
+                logger.info("Shape loaded from JSON")
                 for shape in shapes_list:
-                    self.create_shape(shape)
+                    try:
+                        self.create_shape(shape)
+                    except (ValueError, TypeError) as e:
+                        logger.warning("Skipping invalid shape in JSON. Error: %s", e)
         except FileNotFoundError:
             logger.info("shapes.json not found. Starting with an empty shape list.")
             self.shapes = []
