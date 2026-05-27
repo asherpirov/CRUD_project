@@ -10,6 +10,7 @@ class ShapeManager:
     """Manages CRUD operations and JSON persistence for geometric shapes."""
     def __init__(self):
         """Initialize the manager and load existing shapes from JSON."""
+        logger.info("Shape_Manager Initializer")
         self.shapes = []
         self.load_from_json()
 
@@ -28,16 +29,12 @@ class ShapeManager:
         logger.info("Creating new shape: {%s}", new_shape)
         self.shapes.append(new_shape)
         logger.info("Shape: {%s} append to the shape list", new_shape)
+
         return new_shape
-
-
-
 
 
     def get_all_shapes(self):
         """Return a list of all currently managed shapes."""
-        if not self.shapes:
-            return []
         return self.shapes
 
     def update_shape(self, shape_id, new_data):
@@ -56,9 +53,20 @@ class ShapeManager:
         """Load and parse shapes from the JSON file into memory."""
         try:
             with open("shapes.json", "r", encoding="utf-8") as file:
-                logger.info()
-        for shape_dict in self.shapes:
-            if shape_dict["type"] == "regtanle":
+                shapes_list = json.load(file)
+                logger.info("Starting to parse shapes from JSON")
+                for shape in shapes_list:
+                    self.create_shape(shape)
+        except FileNotFoundError:
+            logger.info("shapes.json not found. Starting with an empty shape list.")
+            self.shapes = []
+        except json.JSONDecodeError:
+            logger.warning("Failed to decode JSON: The file shapes.json is empty.")
+            self.shapes = []
+
+
+
+
 
 
 
