@@ -47,7 +47,14 @@ class ShapeManager:
 
     def save_to_json(self):
         """Serialize and save the current shapes list to a JSON file."""
-        pass
+        data_to_save = []
+        for shape in self.shapes:
+            data_to_save.append(shape.to_dict())
+
+        with open("shapes.json", "w", encoding="utf-8") as file:
+            json.dump(data_to_save,file,indent = 4)
+
+        logger.info("Successfully saved %s shapes to shapes.json", len(data_to_save))
 
     def load_from_json(self):
         """Load and parse shapes from the JSON file into memory."""
