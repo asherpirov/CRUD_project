@@ -99,3 +99,19 @@
 2026-05-28 14:33:59,272 | shape_manager | INFO | Successfully update {'id': 2, 'shape_type': 'circle', 'radius': 5.0}
 2026-05-28 14:33:59,273 | shape_manager | INFO | Successfully saved 3 shapes to shapes.json
 2026-05-28 14:34:10,208 | __main__ | INFO | Show all shapes chosen
+2026-05-28 14:35:02,830 | __main__ | INFO | The program started running
+2026-05-28 14:35:02,833 | shape_manager | INFO | Shape_Manager Initializer
+2026-05-28 14:35:02,834 | shape_manager | INFO | Shape loaded from JSON
+2026-05-28 14:35:02,834 | circle | INFO | Created Circle object with ID: 2
+2026-05-28 14:35:02,834 | shape_manager | INFO | Creating new shape: {{'id': 2, 'shape_type': 'circle', 'radius': 5.0}}
+2026-05-28 14:35:02,835 | shape_manager | INFO | Shape: {circle} append to the shape list
+2026-05-28 14:35:02,836 | shape_manager | INFO | Successfully saved 1 shapes to shapes.json
+2026-05-28 14:35:02,836 | rectangle | INFO | Created Rectangle object with ID: 5
+2026-05-28 14:35:02,836 | shape_manager | INFO | Creating new shape: {{'id': 5, 'shape_type': 'rectangle', 'width': 10.0, 'height': 15.0}}
+2026-05-28 14:35:02,836 | shape_manager | INFO | Shape: {rectangle} append to the shape list
+2026-05-28 14:35:02,837 | shape_manager | INFO | Successfully saved 2 shapes to shapes.json
+2026-05-28 14:35:02,837 | square | INFO | Created Square object with ID: 6
+2026-05-28 14:35:02,837 | shape_manager | INFO | Creating new shape: {{'id': 6, 'shape_type': 'square', 'side': 4.0}}
+2026-05-28 14:35:02,838 | shape_manager | INFO | Shape: {square} append to the shape list
+2026-05-28 14:35:02,839 | shape_manager | INFO | Successfully saved 3 shapes to shapes.json
+2026-05-28 14:35:05,709 | __main__ | INFO | Show all shapes chosen
