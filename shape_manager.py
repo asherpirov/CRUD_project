@@ -29,21 +29,44 @@ class ShapeManager:
         logger.info("Creating new shape: {%s}", shape_dict["shape_type"])
         self.shapes.append(new_shape)
         logger.info("Shape: {%s} append to the shape list", shape_dict["shape_type"])
-
+        self.save_to_json()
         return new_shape
 
 
     def get_all_shapes(self):
         """Return a list of all currently managed shapes."""
-        return self.shapes
+        return self.shapes.copy()
 
     def update_shape(self, shape_id, new_data):
         """Find a shape by ID and update its attributes."""
-        pass
+        for shape in self.shapes:
+            if shape.id == shape_id:
+                if shape.shape_type == "rectangle":
+                    shape.width = new_data["width"]
+                    shape.height = new_data["height"]
+                elif shape.shape_type == "square":
+                    shape.size = new_data["side"]
+                elif shape.shape_type == "circle":
+                    shape.radius = new_data["radius"]
+                logger.info("Successfully update %s", shape.to_dict())
+                self.save_to_json()
+                return True
+
+        logger.warning("Shape ID %s not found for update.", shape_id)
+        return False
 
     def delete_shape(self, shape_id):
         """Remove a shape by ID from the list and save changes."""
-        pass
+        for shape in self.shapes:
+            if shape.id == shape_id:
+                self.shapes.remove(shape)
+                logger.info("Shape ID %s successfully deleted.", shape_id)
+                self.save_to_json()
+                return True
+
+        logger.warning("The ID %s was not found in the file. Delete failed.", shape_id)
+        return False
+
 
     def save_to_json(self):
         """Serialize and save the current shapes list to a JSON file."""
