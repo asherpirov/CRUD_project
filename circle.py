@@ -27,7 +27,7 @@ class Circle(Shape):
     def to_dict(self) -> dict:
         """Return a dictionary representation of the circle."""
         return {"id": self.id,
-                "type": self.shape_type,
+                "shape_type": self.shape_type,
                 "radius": self.radius
                 }
 

@@ -9,7 +9,11 @@ class Rectangle(Shape):
     def __init__(self, shape_id: int, height: float, width: float) -> None:
         """Initialize a Rectangle with an ID, height, and width."""
         super().__init__(shape_id, "rectangle")
-        if not isinstance((height,width), (int, float)) or (height <= 0 and width <= 0):
+        if not isinstance(height, (int, float)) or not isinstance(width, (int, float)):
+            logger.error("Failed to create Rectangle ID %s: Height and width must be numbers.", shape_id)
+            raise TypeError("Height and width must be numbers.")
+
+        if height <= 0 or width <= 0:
             logger.error("Failed to create Rectangle ID %s: Height and width must be greater than 0.", shape_id)
             raise ValueError("The Height and width must be greater than 0.")
         self.height = height
@@ -28,7 +32,7 @@ class Rectangle(Shape):
     def to_dict(self) -> dict:
         """Return a dictionary representation of the rectangle."""
         return {"id": self.id,
-                "type": self.shape_type,
+                "shape_type": self.shape_type,
                 "width": self.width,
                 "height": self.height
                 }

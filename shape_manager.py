@@ -26,8 +26,9 @@ class ShapeManager:
             logger.error("Shape type not recognized")
             raise ValueError("Shape type not recognized")
 
-        logger.info("Creating new shape: {%s}", shape_dict["shape_type"])
+        logger.info("Creating new shape: {%s}", new_shape.to_dict())
         self.shapes.append(new_shape)
+        print(f"The shape{new_shape.to_dict()} created")
         logger.info("Shape: {%s} append to the shape list", shape_dict["shape_type"])
         self.save_to_json()
         return new_shape
@@ -37,17 +38,21 @@ class ShapeManager:
         """Return a list of all currently managed shapes."""
         return self.shapes.copy()
 
-    def update_shape(self, shape_id, new_data):
+    def update_shape(self, shape_id, new_data: dict):
         """Find a shape by ID and update its attributes."""
         for shape in self.shapes:
             if shape.id == shape_id:
                 if shape.shape_type == "rectangle":
-                    shape.width = new_data["width"]
-                    shape.height = new_data["height"]
+                    if "width" in new_data:
+                        shape.width = new_data["width"]
+                    if "height" in new_data:
+                        shape.height = new_data["height"]
                 elif shape.shape_type == "square":
-                    shape.size = new_data["side"]
+                    if "side" in new_data:
+                        shape.side = new_data["side"]
                 elif shape.shape_type == "circle":
-                    shape.radius = new_data["radius"]
+                    if "radius" in new_data:
+                        shape.radius = new_data["radius"]
                 logger.info("Successfully update %s", shape.to_dict())
                 self.save_to_json()
                 return True
@@ -88,7 +93,7 @@ class ShapeManager:
                 for shape in shapes_list:
                     try:
                         self.create_shape(shape)
-                    except (ValueError, TypeError) as e:
+                    except (ValueError,TypeError,KeyError) as e:
                         logger.warning("Skipping invalid shape in JSON. Error: %s", e)
         except FileNotFoundError:
             logger.info("shapes.json not found. Starting with an empty shape list.")
@@ -98,13 +103,13 @@ class ShapeManager:
             self.shapes = []
 
 
-    def get_new_id(self, shape_id):
+    def get_new_id(self):
         max_id = 0
         for shape in self.shapes:
             if shape.id > max_id:
                 max_id = shape.id
 
-        new_id = shape_id + 1
+        new_id = max_id + 1
         logger.info("New ID find %s", new_id)
         return new_id
 
