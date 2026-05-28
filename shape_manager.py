@@ -98,6 +98,15 @@ class ShapeManager:
             self.shapes = []
 
 
+    def get_new_id(self, shape_id):
+        max_id = 0
+        for shape in self.shapes:
+            if shape.id > max_id:
+                max_id = shape.id
+
+        new_id = shape_id + 1
+        logger.info("New ID find %s", new_id)
+        return new_id
 
 
 
