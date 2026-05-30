@@ -93,6 +93,10 @@ def main():
                         target_shape = shape
                         break
 
+                if target_shape is None:
+                    print(f"Update failed. Shape with ID {shape_id} does not exist.")
+                    continue
+
                 new_data = {}
                 print(f"Found shape of type: {target_shape.shape_type}")
 
