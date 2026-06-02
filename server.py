@@ -21,6 +21,11 @@ def get_total_area():
     area = manager.get_total_area()
     return {"sum of total area" : round(area,2)}
 
+@app.get("/shapes/count")
+def count_of_shapes():
+    shapes_list = manager.get_all_shapes()
+    return {"total shape":  len(shapes_list)}
+
 
 @app.get("/shapes/{id}")
 def get_shape_by_id(id: int):
