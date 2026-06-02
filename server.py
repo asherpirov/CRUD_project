@@ -1,5 +1,14 @@
 from fastapi import FastAPI, HTTPException
 from shape_manager import ShapeManager
+from pydantic import BaseModel
+from typing import Optional
+
+class ShapeCreate(BaseModel):
+    shape_type: str
+    side: Optional[float] = None
+    radius: Optional[float] = None
+    width: Optional[float] = None
+    height: Optional[float] = None
 
 app = FastAPI()
 
@@ -46,8 +55,10 @@ def get_shape_by_id(id: int):
 
 
 @app.post("/shapes", status_code=201)
-def create_shape(shape_dict: dict):
+def create_shape(shape_dict: ShapeCreate):
+
     id = manager.get_new_id()
+    shape_dict = shape_dict.model_dump(exclude_unset= True)
     shape_dict["id"] = id
     created_shape = manager.create_shape(shape_dict)
     return created_shape.to_dict()
