@@ -10,6 +10,12 @@ class ShapeCreate(BaseModel):
     width: Optional[float] = None
     height: Optional[float] = None
 
+class ShapeUpdate(BaseModel):
+    side: Optional[float] = None
+    radius: Optional[float] = None
+    width: Optional[float] = None
+    height: Optional[float] = None
+
 app = FastAPI()
 
 manager = ShapeManager()
@@ -65,7 +71,8 @@ def create_shape(shape_dict: ShapeCreate):
 
 
 @app.put("/shapes/{id}")
-def update_shape(id: int,new_data: dict):
+def update_shape(id: int,new_data: ShapeUpdate):
+    new_data = new_data.model_dump(exclude_unset= True)
     update_shpe = manager.update_shape(id, new_data)
     if update_shpe is False:
         raise HTTPException(status_code= 404, detail= "Error in shape update ")
