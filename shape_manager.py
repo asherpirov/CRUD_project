@@ -36,7 +36,9 @@ class ShapeManager:
 
     def get_all_shapes(self):
         """Return a list of all currently managed shapes."""
-        return self.shapes.copy()
+        if not self.shapes:
+            return []
+        return self.shapes
 
     def update_shape(self, shape_id, new_data: dict):
         """Find a shape by ID and update its attributes."""
@@ -112,6 +114,13 @@ class ShapeManager:
         new_id = max_id + 1
         logger.info("New ID find %s", new_id)
         return new_id
+
+    def get_total_area(self):
+        """return sum of area for all shapes"""
+        sum_of_area = 0
+        for shape in self.shapes:
+            sum_of_area += shape.get_area()
+        return sum_of_area
 
 
 
