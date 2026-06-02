@@ -54,9 +54,8 @@ def get_shape_type(type:str):
 @app.get("/shapes/{id}")
 def get_shape_by_id(id: int):
     for shape in manager.shapes:
-        shape = shape.to_dict()
-        if shape["id"] == id:
-            return shape
+        if shape.id == id:
+            return shape.to_dict()
     raise HTTPException(status_code= 404, detail= "Error: the shape not exist")
 
 
@@ -81,6 +80,8 @@ def update_shape(id: int,new_data: ShapeUpdate):
 
 @app.delete("/shapes/{id}")
 def del_shape(id: int):
-    if manager.delete_shape(id) is False:
+    success =  manager.delete_shape(id)
+    if not success:
         raise HTTPException(status_code=404, detail="Error in shape deleted")
-    return manager.delete_shape(id)
+    return {"message": "Shape deleted successfully"}
+
