@@ -28,7 +28,7 @@ def get_shape_by_id(id: int):
         shape = shape.to_dict()
         if shape["id"] == id:
             return shape
-    return []
+    raise HTTPException(status_code= 404, detail= "Error: the shape not exist")
 
 
 @app.post("/shapes", status_code=201)
