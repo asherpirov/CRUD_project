@@ -42,7 +42,13 @@ def create_shape(shape_dict: dict):
 @app.put("/shapes/{id}")
 def update_shape(id: int,new_data: dict):
     update_shpe = manager.update_shape(id, new_data)
-    if update_shpe is None:
+    if update_shpe is False:
         raise HTTPException(status_code= 404, detail= "Error in shape update ")
 
     return update_shpe
+
+@app.delete("/shapes/{id}")
+def del_shape(id: int):
+    if manager.delete_shape(id) is False:
+        raise HTTPException(status_code=404, detail="Error in shape deleted")
+    return manager.delete_shape(id)

@@ -1,4 +1,8 @@
+#https://github.com/asherpirov/CRUD_project.git
+
 import logging
+
+from server import manager
 from shape_manager import ShapeManager
 import rectangle
 import square
