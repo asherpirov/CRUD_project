@@ -24,8 +24,17 @@ def get_total_area():
 @app.get("/shapes/count")
 def count_of_shapes():
     shapes_list = manager.get_all_shapes()
-    return {"total shape":  len(shapes_list)}
+    return {"total shapes": len(shapes_list)}
 
+@app.get("/shapes/type/{type}")
+def get_shape_type(type:str):
+    new_lst_type = []
+    for shape in manager.shapes:
+        if shape.shape_type == type:
+            new_lst_type.append(shape.to_dict())
+    if not new_lst_type:
+        raise HTTPException(status_code=404, detail="Error: the shape not exist")
+    return new_lst_type
 
 @app.get("/shapes/{id}")
 def get_shape_by_id(id: int):
