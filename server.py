@@ -13,6 +13,13 @@ def home():
 def all_shape():
     return manager.get_all_shapes()
 
+
+@app.get("/shapes/total-area")
+def get_total_area():
+    area = manager.get_total_area()
+    return {"sum of total area" : round(area,2)}
+
+
 @app.get("/shapes/{id}")
 def get_shape_by_id(id: int):
     try:
@@ -23,4 +30,3 @@ def get_shape_by_id(id: int):
     except:
         raise HTTPException(status_code=404,
             detail="the shape ot exist")
-
