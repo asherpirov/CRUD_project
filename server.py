@@ -38,3 +38,11 @@ def create_shape(shape_dict: dict):
     created_shape = manager.create_shape(shape_dict)
     return created_shape.to_dict()
 
+
+@app.put("/shapes/{id}")
+def update_shape(id: int,new_data: dict):
+    update_shpe = manager.update_shape(id, new_data)
+    if update_shpe is None:
+        raise HTTPException(status_code= 404, detail= "Error in shape update ")
+
+    return update_shpe
