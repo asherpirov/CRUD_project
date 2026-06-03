@@ -1,6 +1,6 @@
 from fastapi import FastAPI, HTTPException
 from shape_manager import ShapeManager
-from pydantic import BaseModel
+from pydantic import BaseModel, PositiveFloat
 from typing import Optional
 
 class ShapeCreate(BaseModel):
@@ -61,22 +61,28 @@ def get_shape_by_id(id: int):
 
 @app.post("/shapes", status_code=201)
 def create_shape(shape_dict: ShapeCreate):
+    try:
+        id = manager.get_new_id()
+        shape_dict = shape_dict.model_dump(exclude_unset= True)
+        shape_dict["id"] = id
+        created_shape = manager.create_shape(shape_dict)
+        return created_shape.to_dict()
+    except (KeyError, TypeError, ValueError) as e:
+            raise HTTPException(status_code= 400, detail= f"Error:{str(e)}")
 
-    id = manager.get_new_id()
-    shape_dict = shape_dict.model_dump(exclude_unset= True)
-    shape_dict["id"] = id
-    created_shape = manager.create_shape(shape_dict)
-    return created_shape.to_dict()
 
 
 @app.put("/shapes/{id}")
 def update_shape(id: int,new_data: ShapeUpdate):
-    new_data = new_data.model_dump(exclude_unset= True)
-    update_shpe = manager.update_shape(id, new_data)
-    if update_shpe is False:
-        raise HTTPException(status_code= 404, detail= "Error in shape update ")
+    try:
+        new_data = new_data.model_dump(exclude_unset= True)
+        update_shpe = manager.update_shape(id, new_data)
+        if update_shpe is False:
+            raise HTTPException(status_code= 404, detail= "Error in shape update ")
 
-    return update_shpe
+        return update_shpe
+    except (KeyError, TypeError, ValueError) as e:
+            raise HTTPException(status_code= 400, detail= f"Error:{str(e)}")
 
 @app.delete("/shapes/{id}")
 def del_shape(id: int):
