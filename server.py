@@ -2,6 +2,9 @@ from fastapi import FastAPI, HTTPException
 from shape_manager import ShapeManager
 from pydantic import BaseModel, PositiveFloat
 from typing import Optional
+import logging
+
+logger = logging.getLogger(__name__)
 
 class ShapeCreate(BaseModel):
     shape_type: str
@@ -19,6 +22,7 @@ class ShapeUpdate(BaseModel):
 app = FastAPI()
 
 manager = ShapeManager()
+logger.info("FastAPI Server initialized and ShapeManager loaded successfully.")
 
 @app.get("/")
 def home():
@@ -48,6 +52,7 @@ def get_shape_type(type:str):
         if shape.shape_type == type:
             new_lst_type.append(shape.to_dict())
     if not new_lst_type:
+        logger.warning("Fetch failed: No shapes found for type '%s'", type)
         raise HTTPException(status_code=404, detail="Error: the shape not exist")
     return new_lst_type
 
@@ -56,6 +61,7 @@ def get_shape_by_id(id: int):
     for shape in manager.shapes:
         if shape.id == id:
             return shape.to_dict()
+    logger.warning("Fetch failed: Shape ID %s not found", id)
     raise HTTPException(status_code= 404, detail= "Error: the shape not exist")
 
 
@@ -66,9 +72,11 @@ def create_shape(shape_dict: ShapeCreate):
         shape_dict = shape_dict.model_dump(exclude_unset= True)
         shape_dict["id"] = id
         created_shape = manager.create_shape(shape_dict)
+        logger.info("Shape created successfully with ID %s", id)
         return created_shape.to_dict()
     except (KeyError, TypeError, ValueError) as e:
-            raise HTTPException(status_code= 400, detail= f"Error:{str(e)}")
+        logger.error("Validation error during shape creation: %s", str(e))
+        raise HTTPException(status_code= 400, detail= f"Error:{str(e)}")
 
 
 
@@ -78,16 +86,20 @@ def update_shape(id: int,new_data: ShapeUpdate):
         new_data = new_data.model_dump(exclude_unset= True)
         update_shpe = manager.update_shape(id, new_data)
         if update_shpe is False:
+            logger.warning("Update failed: Shape ID %s not found", id)
             raise HTTPException(status_code= 404, detail= "Error in shape update ")
 
         return update_shpe
     except (KeyError, TypeError, ValueError) as e:
+            logger.error("Validation error during update for shape ID %s: %s", id, str(e))
             raise HTTPException(status_code= 400, detail= f"Error:{str(e)}")
 
 @app.delete("/shapes/{id}")
 def del_shape(id: int):
     success =  manager.delete_shape(id)
     if not success:
+        logger.warning("Deleted failed: Shape ID %s not found", id)
         raise HTTPException(status_code=404, detail="Error in shape deleted")
+    logger.info("Shape ID %s deleted successfully", id)
     return {"message": "Shape deleted successfully"}
 
