@@ -52,18 +52,24 @@ class ShapeManager:
         for field in fields:
             if field in new_data and new_data[field] is not None:
                 if new_data[field] <= 0:
-                    raise ValueError(f"Error: Cannot update {field} with a value less than or equal to 0")
+                    raise ValueError(f"Cannot update {field} with a value less than or equal to 0")
         for shape in self.shapes:
             if shape.id == shape_id:
                 if shape.shape_type == "rectangle":
+                    if "side" in new_data or "radius" in new_data:
+                        raise ValueError("Rectangle can only have width and height")
                     if "width" in new_data:
                         shape.width = new_data["width"]
                     if "height" in new_data:
                         shape.height = new_data["height"]
                 elif shape.shape_type == "square":
+                    if "radius" in new_data or "width" in new_data or "height" in new_data:
+                        raise ValueError("Square can only have a side attribute")
                     if "side" in new_data:
                         shape.side = new_data["side"]
                 elif shape.shape_type == "circle":
+                    if "side" in new_data or "width" in new_data or "height" in new_data:
+                        raise ValueError("Circle can only have a radius attribute")
                     if "radius" in new_data:
                         shape.radius = new_data["radius"]
                 logger.info("Successfully update %s", shape.to_dict())
