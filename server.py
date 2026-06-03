@@ -26,15 +26,23 @@ logger.info("FastAPI Server initialized and ShapeManager loaded successfully.")
 
 @app.get("/")
 def home():
+    """Return a welcome message for the shapes CRUD project."""
     return {"Welcome" : "For the CRUD shape project"}
 
 @app.get("/shapes")
 def all_shape():
+    """Retrieve all shapes currently stored in the system."""
     return manager.get_all_shapes()
 
 
 @app.get("/shapes/total-area")
 def get_total_area():
+    """
+        Calculate the total area of all shapes combined.
+
+        Raises:
+            HTTPException (404): If no shapes exist to calculate area.
+    """
     if not manager.shapes:
         raise HTTPException(status_code=404, detail= "No shapes found calculate area")
     area = manager.get_total_area()
@@ -42,11 +50,18 @@ def get_total_area():
 
 @app.get("/shapes/count")
 def count_of_shapes():
+    """Return the total number of shapes in the system."""
     shapes_list = manager.get_all_shapes()
     return {"total shapes": len(shapes_list)}
 
 @app.get("/shapes/type/{type}")
 def get_shape_type(type:str):
+    """
+    Filter and retrieve shapes by their specific type.
+
+    Raises:
+        HTTPException (404): If no shapes match the requested type.
+    """
     new_lst_type = []
     for shape in manager.shapes:
         if shape.shape_type == type:
@@ -58,6 +73,12 @@ def get_shape_type(type:str):
 
 @app.get("/shapes/{id}")
 def get_shape_by_id(id: int):
+    """
+    Retrieve a specific shape by its unique ID.
+
+    Raises:
+        HTTPException (404): If the shape ID does not exist.
+    """
     for shape in manager.shapes:
         if shape.id == id:
             return shape.to_dict()
@@ -67,6 +88,12 @@ def get_shape_by_id(id: int):
 
 @app.post("/shapes", status_code=201)
 def create_shape(shape_dict: ShapeCreate):
+    """
+    Create and store a new shape with a generated ID.
+
+    Raises:
+        HTTPException (400): If validation fails (negative values or invalid fields).
+    """
     try:
         id = manager.get_new_id()
         shape_dict = shape_dict.model_dump(exclude_unset= True)
@@ -82,6 +109,13 @@ def create_shape(shape_dict: ShapeCreate):
 
 @app.put("/shapes/{id}")
 def update_shape(id: int,new_data: ShapeUpdate):
+    """
+    Update an existing shape's attributes by ID.
+
+    Raises:
+        HTTPException (404): If the shape is not found.
+        HTTPException (400): If the update values or fields are invalid.
+    """
     try:
         new_data = new_data.model_dump(exclude_unset= True)
         update_shpe = manager.update_shape(id, new_data)
@@ -96,6 +130,12 @@ def update_shape(id: int,new_data: ShapeUpdate):
 
 @app.delete("/shapes/{id}")
 def del_shape(id: int):
+    """
+    Delete a shape from the system by its ID.
+
+    Raises:
+        HTTPException (404): If the shape is not found.
+    """
     success =  manager.delete_shape(id)
     if not success:
         logger.warning("Deleted failed: Shape ID %s not found", id)

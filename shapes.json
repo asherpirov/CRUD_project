@@ -13,17 +13,12 @@
     {
         "id": 6,
         "shape_type": "square",
-        "side": 18.0
-    },
-    {
-        "id": 8,
-        "shape_type": "circle",
-        "radius": 10
+        "side": 100.0
     },
     {
         "id": 9,
         "shape_type": "circle",
-        "radius": 20
+        "radius": 14.0
     },
     {
         "id": 10,
@@ -34,5 +29,27 @@
         "id": 11,
         "shape_type": "square",
         "side": 18.0
+    },
+    {
+        "id": 12,
+        "shape_type": "square",
+        "side": 18.0
+    },
+    {
+        "id": 13,
+        "shape_type": "rectangle",
+        "width": 15.0,
+        "height": 40.0
+    },
+    {
+        "id": 14,
+        "shape_type": "rectangle",
+        "width": 15.0,
+        "height": 40.0
+    },
+    {
+        "id": 15,
+        "shape_type": "square",
+        "side": 101.0
     }
 ]
