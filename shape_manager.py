@@ -16,6 +16,12 @@ class ShapeManager:
 
     def create_shape(self, shape_dict: dict):
         """Add a new shape to the list and save changes."""
+        fields = ["side", "radius", "width", "height"]
+        for field in fields:
+            if field in shape_dict and shape_dict[field] is not None:
+                if shape_dict[field] <= 0:
+                    raise ValueError(f"Error: {field} must be greater than 0")
+
         if shape_dict["shape_type"] == "rectangle":
             new_shape = Rectangle(shape_dict["id"] ,shape_dict["height"],shape_dict["width"])
         elif shape_dict["shape_type"] == "circle":
@@ -42,6 +48,11 @@ class ShapeManager:
 
     def update_shape(self, shape_id, new_data: dict):
         """Find a shape by ID and update its attributes."""
+        fields = ["side", "radius", "width", "height"]
+        for field in fields:
+            if field in new_data and new_data[field] is not None:
+                if new_data[field] <= 0:
+                    raise ValueError(f"Error: Cannot update {field} with a value less than or equal to 0")
         for shape in self.shapes:
             if shape.id == shape_id:
                 if shape.shape_type == "rectangle":
